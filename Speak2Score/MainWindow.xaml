@@ -11,11 +11,13 @@
             <ColumnDefinition Width="80*" />
             <ColumnDefinition Width="67*" />
         </Grid.ColumnDefinitions>
-        <TextBox Name="tb" HorizontalAlignment="Left" Height="143" Margin="32,54,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140" Grid.ColumnSpan="2" />
+        <TextBox Name="tb" HorizontalAlignment="Left" Height="143" Margin="32,64,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140" Grid.ColumnSpan="2" />
         <TextBox Name="tbScoreTable" HorizontalAlignment="Left" Height="143" Margin="32,222,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140" Grid.ColumnSpan="2" />
-        <Button Name="btnStart" Content="Start" HorizontalAlignment="Left" Margin="32,54,0,0" VerticalAlignment="Top" Click="BtnStart_Click" Width="70" Height="29" Grid.Column="1" />
-        <Button Name="btnReset"  Content="Reset" HorizontalAlignment="Left" Margin="32,203,0,0" VerticalAlignment="Top" Click="BtnReset_Click" Width="70" Height="29" Grid.Column="1" />
-        <Button Name="btnStop" Content="Stop" HorizontalAlignment="Left" Margin="32,102,0,0" VerticalAlignment="Top" Click="BtnStop_Click" Width="70" Height="29" Grid.Column="1" />
-        <Button Name="btnRecover" Content="Recover" HorizontalAlignment="Left" Margin="32,153,0,0" VerticalAlignment="Top" Click="BtnRecover_Click" Width="70" Height="29" Grid.Column="1" />
+        <Button Name="btnStart" Content="Start" HorizontalAlignment="Left" Margin="38,67,0,0" VerticalAlignment="Top" Click="BtnStart_Click" Width="70" Height="29" Grid.Column="1" />
+        <Button Name="btnReset"  Content="Reset" HorizontalAlignment="Left" Margin="38,216,0,0" VerticalAlignment="Top" Click="BtnReset_Click" Width="70" Height="29" Grid.Column="1" />
+        <Button Name="btnStop" Content="Stop" HorizontalAlignment="Left" Margin="38,115,0,0" VerticalAlignment="Top" Click="BtnStop_Click" Width="70" Height="29" Grid.Column="1" />
+        <Button Name="btnRecover" Content="Recover" HorizontalAlignment="Left" Margin="38,166,0,0" VerticalAlignment="Top" Click="BtnRecover_Click" Width="70" Height="29" Grid.Column="1" />
+        <TextBox Name="tbExcelFilename" HorizontalAlignment="Left" Height="29" Margin="32,20,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140" Grid.ColumnSpan="2" VerticalContentAlignment="Center" LostFocus="tbExcelFilename_LostFocus" GotFocus="tbExcelFilename_GotFocus" />
+        <Button Name="btnSaveFile" Content="Save" Grid.Column="1" HorizontalAlignment="Left" Margin="38,20,0,0" VerticalAlignment="Top" Width="70" Height="29" />
     </Grid>
 </Window>

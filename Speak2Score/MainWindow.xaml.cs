@@ -23,6 +23,8 @@ namespace Speak2Score
     /// </summary>
     public partial class MainWindow : Window
     {
+        private const string tbExcelFilenameHint = "Excel Filename";
+
         private SpeechRecognizedEventArgs speechEvent;
         private SpeechRecognitionEngine recEngine = new SpeechRecognitionEngine(new System.Globalization.CultureInfo("zh-TW"));
         private GrammarBuilder gBuilder = new GrammarBuilder();
@@ -37,6 +39,7 @@ namespace Speak2Score
         {
             CheckMicrophone();
             InitializeComponent();
+            UISetup();
             BuildVocabulary();
             BuildSpeechRecognition();
             TimerSetup();
@@ -51,8 +54,14 @@ namespace Speak2Score
             catch
             {
                 MessageBox.Show("No Microphone Detected, Please Check");
-                Close();
+                //Close();
             }
+        }
+
+        private void UISetup()
+        {
+            tbExcelFilename.Text = tbExcelFilenameHint;
+            tbExcelFilename.Foreground = Brushes.LightGray;
         }
 
         private void BuildVocabulary()
@@ -151,6 +160,24 @@ namespace Speak2Score
         {
             tb.Text = "Recover Success";
             temp = null;
+        }
+
+        private void tbExcelFilename_LostFocus(object sender, RoutedEventArgs e)
+        {
+            if (tbExcelFilename.Text == "")
+            {
+                tbExcelFilename.Text = tbExcelFilenameHint;
+                tbExcelFilename.Foreground = Brushes.LightGray;
+            }
+        }
+
+        private void tbExcelFilename_GotFocus(object sender, RoutedEventArgs e)
+        {
+            if (tbExcelFilename.Text == tbExcelFilenameHint)
+            {
+                tbExcelFilename.Text = "";
+                tbExcelFilename.Foreground = Brushes.Black;
+            }
         }
     }
 }

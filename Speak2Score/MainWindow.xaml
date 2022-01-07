@@ -5,13 +5,17 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Speak2Score"
         mc:Ignorable="d"
-        Title="Speak2Score _ v0.1" Height="394.147" Width="249.718">
+        Title="Speak2Score _ v0.1" Height="422.074" Width="301.763">
     <Grid>
-        <TextBox Name="tb" HorizontalAlignment="Left" Height="143" Margin="19,23,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140" />
-        <TextBox Name="tbScoreTable" HorizontalAlignment="Left" Height="143" Margin="19,191,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140" />
-        <Button Name="btnStart" Content="Start" HorizontalAlignment="Left" Margin="179,23,0,0" VerticalAlignment="Top" Click="BtnStart_Click" Width="41" Height="29" />
-        <Button Name="btnReset"  Content="Reset" HorizontalAlignment="Left" Margin="179,172,0,0" VerticalAlignment="Top" Click="BtnReset_Click" Width="41" Height="29" />
-        <Button Name="btnStop" Content="Stop" HorizontalAlignment="Left" Margin="179,71,0,0" VerticalAlignment="Top" Click="BtnStop_Click" Width="41" Height="29" />
-        <Button Name="btnRecover" Content="Recover" HorizontalAlignment="Left" Margin="179,122,0,0" VerticalAlignment="Top" Click="BtnRecover_Click" Width="41" Height="29" />
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="80*" />
+            <ColumnDefinition Width="67*" />
+        </Grid.ColumnDefinitions>
+        <TextBox Name="tb" HorizontalAlignment="Left" Height="143" Margin="32,54,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140" Grid.ColumnSpan="2" />
+        <TextBox Name="tbScoreTable" HorizontalAlignment="Left" Height="143" Margin="32,222,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140" Grid.ColumnSpan="2" />
+        <Button Name="btnStart" Content="Start" HorizontalAlignment="Left" Margin="32,54,0,0" VerticalAlignment="Top" Click="BtnStart_Click" Width="70" Height="29" Grid.Column="1" />
+        <Button Name="btnReset"  Content="Reset" HorizontalAlignment="Left" Margin="32,203,0,0" VerticalAlignment="Top" Click="BtnReset_Click" Width="70" Height="29" Grid.Column="1" />
+        <Button Name="btnStop" Content="Stop" HorizontalAlignment="Left" Margin="32,102,0,0" VerticalAlignment="Top" Click="BtnStop_Click" Width="70" Height="29" Grid.Column="1" />
+        <Button Name="btnRecover" Content="Recover" HorizontalAlignment="Left" Margin="32,153,0,0" VerticalAlignment="Top" Click="BtnRecover_Click" Width="70" Height="29" Grid.Column="1" />
     </Grid>
 </Window>

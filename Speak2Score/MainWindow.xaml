@@ -5,26 +5,108 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:Speak2Score"
         mc:Ignorable="d"
-        Title="Speak2Score _ v0.1" Height="422.074" Width="301.763" Closed="MainWindow_Closed" Loaded="MainWindow_Loaded">
+        Title="Speak2Score _ v1.0" Height="632" Width="320" Closed="MainWindow_Closed" Loaded="MainWindow_Loaded">
     <Grid>
+        <Grid.RowDefinitions>
+            <RowDefinition />
+        </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="80*" />
-            <ColumnDefinition Width="67*" />
+            <ColumnDefinition />
         </Grid.ColumnDefinitions>
-        <TextBox Name="tb"
-                 HorizontalAlignment="Left"
-                 Height="143" Width="140"
-                 Margin="32,64,0,0"
-                 TextWrapping="Wrap"
+
+        <TextBox Name="tbExcelFilename"
+                 Width="140" Height="29"
+                 Margin="29,10,123,0"
                  VerticalAlignment="Top"
-                 Grid.ColumnSpan="2">
-        </TextBox>
-        <TextBox Name="tbScoreTable" HorizontalAlignment="Left" Height="143" Margin="32,222,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140" Grid.ColumnSpan="2" />
-        <Button Name="btnStart" Content="Start" HorizontalAlignment="Left" Margin="38,67,0,0" VerticalAlignment="Top" Click="BtnStart_Click" Width="70" Height="29" Grid.Column="1" />
-        <Button Name="btnReset"  Content="Reset" HorizontalAlignment="Left" Margin="38,216,0,0" VerticalAlignment="Top" Click="BtnReset_Click" Width="70" Height="29" Grid.Column="1" />
-        <Button Name="btnStop" Content="Stop" HorizontalAlignment="Left" Margin="38,115,0,0" VerticalAlignment="Top" Click="BtnStop_Click" Width="70" Height="29" Grid.Column="1" />
-        <Button Name="btnRecover" Content="Recover" HorizontalAlignment="Left" Margin="38,166,0,0" VerticalAlignment="Top" Click="BtnRecover_Click" Width="70" Height="29" Grid.Column="1" />
-        <TextBox Name="tbExcelFilename" HorizontalAlignment="Left" Height="29" Margin="32,20,0,0" TextWrapping="Wrap" VerticalAlignment="Top" Width="140" Grid.ColumnSpan="2" VerticalContentAlignment="Center" LostFocus="tbExcelFilename_LostFocus" GotFocus="tbExcelFilename_GotFocus" />
-        <Button Name="btnSaveFile" Content="Save" Grid.Column="1" HorizontalAlignment="Left" Margin="38,20,0,0" VerticalAlignment="Top" Width="70" Height="29" Click="BtnSaveFile_Click" />
+                 VerticalContentAlignment="Center"
+                 LostFocus="tbExcelFilename_LostFocus"
+                 GotFocus="tbExcelFilename_GotFocus" />
+        <TextBox Name="tb"
+                 Width="140" Height="29"
+                 Margin="31,206,121,0"
+                 VerticalAlignment="Top"
+                 VerticalContentAlignment="Center" />
+        <TextBox Name="tbScoreTable"
+                 Width="140" Height="86"
+                 Margin="31,284,121,0"
+                 VerticalAlignment="Top" />
+
+        <Button Name="btnStart"
+                Content="Start"
+                Width="70" Height="29"
+                Margin="194,58,28,0"
+                VerticalAlignment="Top"
+                Click="BtnStart_Click" />
+        <Button Name="btnReset"
+                Content="Reset"
+                Width="70" Height="29"
+                Margin="194,206,28,0"
+                VerticalAlignment="Top"
+                Click="BtnReset_Click" />
+        <Button Name="btnStop"
+                Content="Stop"
+                Width="70" Height="29"
+                Margin="194,105,28,0"
+                VerticalAlignment="Top"
+                Click="BtnStop_Click" />
+        <Button Name="btnRecover"
+                Content="Recover"
+                Width="70" Height="29"
+                Margin="194,156,28,0"
+                VerticalAlignment="Top"
+                Click="BtnRecover_Click" />
+        <Button Name="btnSaveFile"
+                Content="Save"
+                Width="70" Height="29"
+                Margin="194,10,28,0"
+                VerticalAlignment="Top"
+                Click="BtnSaveFile_Click" />
+
+        <Label Content="Student No."
+               Width="78" Height="25"
+               Margin="31,44,183,0"
+               VerticalAlignment="Top" />
+        <Label x:Name="lbStudent"
+               Height="55" Width="80"
+               Margin="58,69,154,0"
+               VerticalAlignment="Top"
+               FontSize="36"
+               HorizontalContentAlignment="Center"
+               VerticalContentAlignment="Center" />
+        <Label Content="Score"
+               Width="78" Height="25"
+               Margin="31,124,183,0"
+               VerticalAlignment="Top" />
+        <Label x:Name="lbScore"
+               Width="80"  Height="55"
+               Margin="58,149,154,0"
+               VerticalAlignment="Top"
+               HorizontalContentAlignment="Center"
+               VerticalContentAlignment="Center" FontSize="36" />
+
+        <local:ButtonArray x:Name="buttonArray"
+                           Margin="0,413,0,0"
+                           VerticalAlignment="Top"
+                           HorizontalAlignment="Center" />
+        <TextBox Name="tbStudentNumber"
+                 Margin="106,384,146,0"
+                 VerticalAlignment="Top"
+                 FontSize="14"
+                 Height="18" Width="36"
+                 BorderBrush="Transparent"
+                 VerticalContentAlignment="Center"
+                 HorizontalContentAlignment="Center" TextChanged="tbStudentNumber_TextChanged" />
+        <Button Name="btnStudentplus"
+                Content="+"
+                Margin="156,384,112,0"
+                VerticalAlignment="Top" Height="18"
+                FontSize="8"
+                Click="BtnStudentplus_Click" Width="24" />
+        <Button Name="btnStudentMinus"
+                Content="-"
+                Margin="194,384,74,0"
+                VerticalAlignment="Top" Height="18"
+                FontSize="8"
+                Click="BtnStudentMinus_Click" Width="24" />
     </Grid>
 </Window>

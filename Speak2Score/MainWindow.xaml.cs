@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Runtime.InteropServices;
 using System.Speech.Recognition;
 using System.Text;
 using System.Threading.Tasks;
@@ -26,11 +27,12 @@ namespace Speak2Score
     {
         private const string tbExcelFilenameHint = "Excel Filename";
         private string currentDirectory;
-        private string excelFileName;
+        private string excelFullFilePath;
         private Excel.Application excelApp;
         private Excel.Workbook excelWB;
         private Excel.Worksheet excelWS;
         private int cellX, cellY;
+        private string num, score;
 
         private SpeechRecognizedEventArgs speechEvent;
         private SpeechRecognitionEngine recEngine = new SpeechRecognitionEngine(new System.Globalization.CultureInfo("zh-TW"));
@@ -38,8 +40,9 @@ namespace Speak2Score
         private Choices vocabulary = new Choices();
         private Grammar grammer;
 
-        private int studentNum = 30;
+        private int studentNum;
         private string temp;
+
         private List<string> scoreTable = new List<string> { };
 
         private DispatcherTimer timer = new DispatcherTimer();
@@ -49,9 +52,23 @@ namespace Speak2Score
             CheckMicrophone();
             InitializeComponent();
             UISetup();
+            BindingSetup();
+            studentNum = buttonArray.btnNumber;
+
             BuildVocabulary();
             BuildSpeechRecognition();
             TimerSetup();
+        }
+
+        private void BindingSetup()
+        {
+            Binding btnNum = new Binding()
+            {
+                Source = buttonArray,
+                Path = new PropertyPath("btnNumber"),
+                Mode = BindingMode.TwoWay
+            };
+            tbStudentNumber.SetBinding(TextBox.TextProperty, btnNum);
         }
 
         private void CheckMicrophone()
@@ -63,7 +80,7 @@ namespace Speak2Score
             catch
             {
                 MessageBox.Show("No Microphone Detected, Please Check");
-                //Close();
+                Close();
             }
         }
 
@@ -75,20 +92,11 @@ namespace Speak2Score
 
         private void BuildVocabulary()
         {
-            //for (int i = 1; i <= studentNum; i++)
-            //{
-            //    vocabulary.Add(String.Concat(i.ToString(), "號"));
-            //}
-            //for (int i = 0; i <= 100; i++)
-            //{
-            //    vocabulary.Add(String.Concat(i.ToString(), "分"));
-            //}
-
             for (int i = 1; i <= studentNum; i++)
             {
                 for (int j = 0; j <= 100; j++)
                 {
-                    vocabulary.Add(String.Concat(i.ToString(), "號", j.ToString(), "分"));
+                    vocabulary.Add(String.Concat(i.ToString(), "號", j.ToString()));
                 }
             }
 
@@ -112,53 +120,65 @@ namespace Speak2Score
 
         private void BuildExcelFile()
         {
-            currentDirectory = Directory.GetCurrentDirectory();
             excelApp = new Excel.Application();
+            excelApp.DisplayAlerts = false;
             excelWB = excelApp.Workbooks.Add();
             excelWS = new Excel.Worksheet();
             excelWS = excelWB.Worksheets[1];
             excelWS.Name = "Sheet1";
-            excelWS.Cells[1, 1] = "座號";
-            excelWS.Cells[1, 2] = "期末考";
-
-            for (int i = 2; i <= studentNum + 1; i++)
-            {
-                excelWS.Cells[i, 1] = i - 1;
-            }
         }
 
         private void recEngine_SpeechRecognized(object sender, SpeechRecognizedEventArgs e)
         {
             speechEvent = e;
+
             if (speechEvent.Result.Text.Contains("取消")) // 前次辨識失敗
             {
                 tb.Text = "取消成功";
+                lbStudent.Foreground = Brushes.Red;
+                lbScore.Foreground = Brushes.Red;
                 timer.Start();
             }
             else
             {
+                try
+                {
+                    lbStudent.Foreground = Brushes.Black;
+                    lbScore.Foreground = Brushes.Black;
+
+                    lbStudent.Content = speechEvent.Result.Text.Split(char.Parse("號"))[0];
+                    lbScore.Content = speechEvent.Result.Text.Split(char.Parse("號"))[1];
+                }
+                catch { }
+
                 if (temp != null)
                 {
                     scoreTable.Add(temp); // debug用，將前次辨識的值存入 顯示大表
-                    // X號Y分
-                    //split(號)
-                    // X   Y分
-                    string num, score;
+
                     try
                     {
                         num = temp.Split(char.Parse("號"))[0];
-                        score = (temp.Split(char.Parse("號"))[1]).Split(char.Parse("分"))[0];
+                        score = temp.Split(char.Parse("號"))[1];
                         cellX = Convert.ToInt32(num);
-                        //cellY = Convert.ToInt32(score);
                         excelWS.Cells[cellX + 1, 2] = score;
+                        //TODO: Same file if cellY not empty, go to cellY+1
                     }
                     catch { }
                 }
 
                 tbScoreTable.Text = String.Join("\n", scoreTable); // debug顯示用
+                //tb.Text = speechEvent.Result.Text; // 改成大字幕
 
-                tb.Text = speechEvent.Result.Text;
                 temp = speechEvent.Result.Text;
+
+                if (speechEvent.Result.Text == "OK")
+                {
+                    tb.Text = "OK";
+                    lbStudent.Content = "";
+                    lbScore.Content = "";
+                    RecognizeAsync(false);
+                    SaveExcelFile();
+                }
             }
         }
 
@@ -172,29 +192,57 @@ namespace Speak2Score
             }
         }
 
-        private void SaveExcelFileIfChanged()
+        private void SaveExcelFile()
         {
             if ((tbExcelFilename.Text != "") && (tbExcelFilename.Text != tbExcelFilenameHint))
             {
-                excelFileName = tbExcelFilename.Text;
-                excelWB.SaveAs(currentDirectory + "\\" + excelFileName);
+                excelWS.Cells[1, 1] = "座號";
+                excelWS.Cells[1, 2] = "期末考";
+                for (int i = 2; i <= studentNum + 1; i++)
+                {
+                    excelWS.Cells[i, 1] = i - 1;
+                }
+
+                currentDirectory = Directory.GetCurrentDirectory();
+                excelFullFilePath = String.Concat(currentDirectory, "\\", tbExcelFilename.Text);
+                excelWB.SaveAs(excelFullFilePath);
+                tb.Text = "File Saved Success";
             }
+        }
+
+        private void RecognizeAsync(bool isTrue)
+        {
+            if (isTrue)
+            {
+                try
+                {
+                    recEngine.RecognizeAsync(RecognizeMode.Multiple);
+                }
+                catch { };
+            }
+            else
+            {
+                try
+                {
+                    recEngine.RecognizeAsyncStop();
+                }
+                catch { };
+            }
+
+            btnStart.IsEnabled = !isTrue;
+            btnStop.IsEnabled = isTrue;
         }
 
         #region UI element events
 
         private void BtnStart_Click(object sender, RoutedEventArgs e)
         {
-            recEngine.RecognizeAsync(RecognizeMode.Multiple);
-            btnStart.IsEnabled = false;
-            btnStop.IsEnabled = true;
+            RecognizeAsync(true);
         }
 
         private void BtnStop_Click(object sender, RoutedEventArgs e)
         {
-            recEngine.RecognizeAsyncStop();
-            btnStart.IsEnabled = true;
-            btnStop.IsEnabled = false;
+            RecognizeAsync(false);
         }
 
         private void BtnReset_Click(object sender, RoutedEventArgs e)
@@ -231,7 +279,36 @@ namespace Speak2Score
 
         private void BtnSaveFile_Click(object sender, RoutedEventArgs e)
         {
-            SaveExcelFileIfChanged();
+            SaveExcelFile();
+        }
+
+        private void BtnStudentplus_Click(object sender, RoutedEventArgs e)
+        {
+            if (studentNum < 50)
+            {
+                studentNum++;
+                buttonArray.ButtonNumberChange(studentNum);
+            }
+        }
+
+        private void BtnStudentMinus_Click(object sender, RoutedEventArgs e)
+        {
+            if (studentNum > 1)
+            {
+                studentNum--;
+                buttonArray.ButtonNumberChange(studentNum);
+            }
+        }
+
+        private void tbStudentNumber_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            while (Convert.ToInt32(tbStudentNumber.Text) != studentNum)
+            {
+                if (Convert.ToInt32(tbStudentNumber.Text) > studentNum) studentNum++;
+                else studentNum--;
+
+                buttonArray.ButtonNumberChange(studentNum);
+            }
         }
 
         private void MainWindow_Loaded(object sender, RoutedEventArgs e)
@@ -241,9 +318,13 @@ namespace Speak2Score
 
         private void MainWindow_Closed(object sender, EventArgs e)
         {
-            SaveExcelFileIfChanged();
+            SaveExcelFile();
             excelWB.Close(SaveChanges: false);
             excelApp.Quit();
+
+            Marshal.ReleaseComObject(excelWS);
+            Marshal.ReleaseComObject(excelWB);
+            Marshal.ReleaseComObject(excelApp);
         }
 
         #endregion UI element events
